@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { naira } from "@/lib/format";
-import { settingsQuery } from "@/lib/store-data";
+import { settingsFullQuery } from "@/lib/store-data";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
@@ -41,7 +41,7 @@ const schema = z.object({
 function CheckoutPage() {
   const { user, profile } = useAuth();
   const { items, total, clear } = useCart();
-  const { data: settings } = useQuery(settingsQuery);
+  const { data: settings } = useQuery(settingsFullQuery);
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({ customer_name: "", phone: "", address: "", note: "" });

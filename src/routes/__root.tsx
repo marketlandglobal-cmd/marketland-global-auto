@@ -86,6 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Buy genuine auto spare parts online in Nigeria. Brakes, filters, electrical, suspension and more, delivered nationwide.",
       },
+      { name: "google-site-verification", content: "su2Ll9RfRwglBF679QPC1iohex_OFjTvpWYdnT76ArU" },
       { name: "author", content: "Marketland Global" },
       { property: "og:title", content: "Marketland Global — Auto Spare Parts in Nigeria" },
       {

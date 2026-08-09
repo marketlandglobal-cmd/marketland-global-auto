@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDate, naira } from "@/lib/format";
-import { productsQuery, settingsQuery, type Product, type StoreSettings } from "@/lib/store-data";
+import { productsQuery, settingsFullQuery, type Product, type StoreSettings } from "@/lib/store-data";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -415,7 +415,7 @@ function OrdersAdmin() {
 
 function StoreAdmin() {
   const qc = useQueryClient();
-  const { data: settings } = useQuery(settingsQuery);
+  const { data: settings } = useQuery(settingsFullQuery);
   const [form, setForm] = useState<StoreSettings | null>(null);
 
   useEffect(() => {

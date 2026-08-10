@@ -17,6 +17,7 @@ import { CartProvider } from "@/hooks/useCart";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
+import { InstallGate } from "@/components/InstallGate";
 
 function NotFoundComponent() {
   return (
@@ -149,14 +150,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">
-              {/* Required: nested routes render here. */}
-              <Outlet />
-            </main>
-            <SiteFooter />
-          </div>
+          <InstallGate>
+            <div className="flex min-h-screen flex-col">
+              <SiteHeader />
+              <main className="flex-1">
+                {/* Required: nested routes render here. */}
+                <Outlet />
+              </main>
+              <SiteFooter />
+            </div>
+          </InstallGate>
           <Toaster />
         </CartProvider>
       </AuthProvider>

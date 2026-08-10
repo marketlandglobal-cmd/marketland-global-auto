@@ -4,7 +4,7 @@
  */
 const SW_URL = "/sw.js";
 
-function isBlockedContext(): boolean {
+export function isBlockedContext(): boolean {
   if (!import.meta.env.PROD) return true;
   if (typeof window === "undefined") return true;
   if (window.self !== window.top) return true;

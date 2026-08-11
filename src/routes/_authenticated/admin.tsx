@@ -106,8 +106,31 @@ function ProductsAdmin() {
   const qc = useQueryClient();
   const { data: products } = useQuery(productsQuery);
   const [form, setForm] = useState<ProductForm>(emptyProduct);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const upload = useMutation({
+    mutationFn: async (file: File) => {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("product-images")
+        .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
+      if (error) throw error;
+      const { data, error: signError } = await supabase.storage
+        .from("product-images")
+        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+      if (signError) throw signError;
+      return data.signedUrl;
+    },
+    onSuccess: (url) => {
+      setForm((f) => ({ ...f, image_url: url }));
+      toast.success("Picture uploaded");
+    },
+    onError: (e: Error) => toast.error("Could not upload picture", { description: e.message }),
+  });
 
   const reset = () => setForm(emptyProduct);
+
 
   const save = useMutation({
     mutationFn: async (values: ProductForm) => {

@@ -237,22 +237,39 @@ function ProductsAdmin() {
           </div>
         </div>
         <div>
-          <Label htmlFor="p-img">Product picture link</Label>
-          <Input
+          <Label htmlFor="p-img">Product picture</Label>
+          <input
             id="p-img"
-            placeholder="https://... or /images/part.jpg"
-            value={form.image_url}
-            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              e.target.value = "";
+              if (file) upload.mutate(file);
+            }}
           />
-          {form.image_url && (
-            <img
-              src={form.image_url}
-              alt="Product preview"
-              loading="lazy"
-              className="mt-2 size-24 rounded-lg border border-border object-cover"
-            />
-          )}
+          <div className="mt-1 flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={upload.isPending}
+              onClick={() => fileRef.current?.click()}
+            >
+              <ImagePlus /> {upload.isPending ? "Uploading…" : form.image_url ? "Change picture" : "Upload picture"}
+            </Button>
+            {form.image_url && (
+              <img
+                src={form.image_url}
+                alt="Product preview"
+                loading="lazy"
+                className="size-24 rounded-lg border border-border object-cover"
+              />
+            )}
+          </div>
         </div>
+
         <div className="flex items-center justify-between rounded-lg border border-border p-3">
           <Label htmlFor="p-avail">Available for sale</Label>
           <Switch

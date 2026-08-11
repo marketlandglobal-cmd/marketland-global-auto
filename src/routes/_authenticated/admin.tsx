@@ -481,6 +481,40 @@ function OrdersAdmin() {
               </li>
             ))}
           </ul>
+          {o.receipt_path && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+              <span className="text-sm text-muted-foreground">
+                Payment receipt
+                {o.receipt_submitted_at ? ` · ${formatDate(o.receipt_submitted_at)}` : ""}
+              </span>
+              <Button variant="outline" size="sm" onClick={() => openReceipt(o.receipt_path!)}>
+                View receipt
+              </Button>
+              <Button
+                variant="hero"
+                size="sm"
+                onClick={() =>
+                  setStatus.mutate({ id: o.id, status: "payment_confirmed", reason: null })
+                }
+              >
+                Approve Payment
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const reason = window.prompt("Reason for rejecting this receipt (optional)") ?? "";
+                  setStatus.mutate({
+                    id: o.id,
+                    status: "receipt_rejected",
+                    reason: reason.trim() || null,
+                  });
+                }}
+              >
+                Reject Payment
+              </Button>
+            </div>
+          )}
         </li>
       ))}
     </ul>

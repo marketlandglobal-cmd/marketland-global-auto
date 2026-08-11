@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ImagePlus, Pencil, Plus, Trash2 } from "lucide-react";
+
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -105,8 +106,31 @@ function ProductsAdmin() {
   const qc = useQueryClient();
   const { data: products } = useQuery(productsQuery);
   const [form, setForm] = useState<ProductForm>(emptyProduct);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const upload = useMutation({
+    mutationFn: async (file: File) => {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("product-images")
+        .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
+      if (error) throw error;
+      const { data, error: signError } = await supabase.storage
+        .from("product-images")
+        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+      if (signError) throw signError;
+      return data.signedUrl;
+    },
+    onSuccess: (url) => {
+      setForm((f) => ({ ...f, image_url: url }));
+      toast.success("Picture uploaded");
+    },
+    onError: (e: Error) => toast.error("Could not upload picture", { description: e.message }),
+  });
 
   const reset = () => setForm(emptyProduct);
+
 
   const save = useMutation({
     mutationFn: async (values: ProductForm) => {
@@ -237,22 +261,39 @@ function ProductsAdmin() {
           </div>
         </div>
         <div>
-          <Label htmlFor="p-img">Product picture link</Label>
-          <Input
+          <Label htmlFor="p-img">Product picture</Label>
+          <input
             id="p-img"
-            placeholder="https://... or /images/part.jpg"
-            value={form.image_url}
-            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              e.target.value = "";
+              if (file) upload.mutate(file);
+            }}
           />
-          {form.image_url && (
-            <img
-              src={form.image_url}
-              alt="Product preview"
-              loading="lazy"
-              className="mt-2 size-24 rounded-lg border border-border object-cover"
-            />
-          )}
+          <div className="mt-1 flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={upload.isPending}
+              onClick={() => fileRef.current?.click()}
+            >
+              <ImagePlus /> {upload.isPending ? "Uploading…" : form.image_url ? "Change picture" : "Upload picture"}
+            </Button>
+            {form.image_url && (
+              <img
+                src={form.image_url}
+                alt="Product preview"
+                loading="lazy"
+                className="size-24 rounded-lg border border-border object-cover"
+              />
+            )}
+          </div>
         </div>
+
         <div className="flex items-center justify-between rounded-lg border border-border p-3">
           <Label htmlFor="p-avail">Available for sale</Label>
           <Switch

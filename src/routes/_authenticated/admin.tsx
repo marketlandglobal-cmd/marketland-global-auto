@@ -369,10 +369,22 @@ type AdminOrder = {
   total: number;
   status: string;
   created_at: string;
+  receipt_path: string | null;
+  receipt_submitted_at: string | null;
+  receipt_rejection_reason: string | null;
   order_items: { id: string; product_name: string; unit_price: number; quantity: number }[];
 };
 
-const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+const STATUSES = [
+  "pending",
+  "payment_verification_pending",
+  "payment_confirmed",
+  "receipt_rejected",
+  "confirmed",
+  "shipped",
+  "delivered",
+  "cancelled",
+];
 
 function OrdersAdmin() {
   const qc = useQueryClient();
@@ -389,8 +401,18 @@ function OrdersAdmin() {
   });
 
   const setStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+    mutationFn: async ({
+      id,
+      status,
+      reason,
+    }: {
+      id: string;
+      status: string;
+      reason?: string | null;
+    }) => {
+      const payload: { status: string; receipt_rejection_reason?: string | null } = { status };
+      if (reason !== undefined) payload.receipt_rejection_reason = reason;
+      const { error } = await supabase.from("orders").update(payload).eq("id", id);
       if (error) throw error;
     },
     onSuccess: async () => {
@@ -399,6 +421,17 @@ function OrdersAdmin() {
     },
     onError: (e: Error) => toast.error("Could not update", { description: e.message }),
   });
+
+  const openReceipt = async (path: string) => {
+    const { data, error } = await supabase.storage
+      .from("payment-receipts")
+      .createSignedUrl(path, 60 * 10);
+    if (error || !data) {
+      toast.error("Could not open receipt", { description: error?.message });
+      return;
+    }
+    window.open(data.signedUrl, "_blank", "noopener");
+  };
 
   if ((orders ?? []).length === 0) {
     return <p className="text-sm text-muted-foreground">No orders yet.</p>;

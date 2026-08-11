@@ -67,6 +67,9 @@ export type Database = {
           id: string
           note: string | null
           phone: string
+          receipt_path: string | null
+          receipt_rejection_reason: string | null
+          receipt_submitted_at: string | null
           status: string
           total: number
           updated_at: string
@@ -79,6 +82,9 @@ export type Database = {
           id?: string
           note?: string | null
           phone: string
+          receipt_path?: string | null
+          receipt_rejection_reason?: string | null
+          receipt_submitted_at?: string | null
           status?: string
           total?: number
           updated_at?: string
@@ -91,6 +97,9 @@ export type Database = {
           id?: string
           note?: string | null
           phone?: string
+          receipt_path?: string | null
+          receipt_rejection_reason?: string | null
+          receipt_submitted_at?: string | null
           status?: string
           total?: number
           updated_at?: string
@@ -235,7 +244,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      submit_payment_receipt: {
+        Args: { _order_id: string; _receipt_path: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "customer"

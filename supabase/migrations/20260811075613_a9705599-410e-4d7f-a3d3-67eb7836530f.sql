@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.submit_payment_receipt(uuid, text) FROM anon;

@@ -189,6 +189,7 @@ function ProductsAdmin() {
       description: p.description,
       price: String(p.price),
       image_url: p.image_url ?? "",
+      image_urls: p.image_urls ?? (p.image_url ? [p.image_url] : []),
       category: p.category,
       brand: p.brand ?? "",
       is_available: p.is_available,

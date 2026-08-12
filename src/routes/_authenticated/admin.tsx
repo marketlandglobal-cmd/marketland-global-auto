@@ -110,22 +110,29 @@ function ProductsAdmin() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const upload = useMutation({
-    mutationFn: async (file: File) => {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage
-        .from("product-images")
-        .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
-      if (error) throw error;
-      const { data, error: signError } = await supabase.storage
-        .from("product-images")
-        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (signError) throw signError;
-      return data.signedUrl;
+    mutationFn: async (files: File[]) => {
+      const urls: string[] = [];
+      for (const file of files) {
+        const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage
+          .from("product-images")
+          .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
+        if (error) throw error;
+        const { data, error: signError } = await supabase.storage
+          .from("product-images")
+          .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signError) throw signError;
+        urls.push(data.signedUrl);
+      }
+      return urls;
     },
-    onSuccess: (url) => {
-      setForm((f) => ({ ...f, image_url: url }));
-      toast.success("Picture uploaded");
+    onSuccess: (urls) => {
+      setForm((f) => {
+        const all = [...f.image_urls, ...urls];
+        return { ...f, image_urls: all, image_url: f.image_url || all[0] || "" };
+      });
+      toast.success(urls.length > 1 ? `${urls.length} pictures uploaded` : "Picture uploaded");
     },
     onError: (e: Error) => toast.error("Could not upload picture", { description: e.message }),
   });

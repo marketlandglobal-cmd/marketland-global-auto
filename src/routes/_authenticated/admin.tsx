@@ -46,6 +46,7 @@ const emptyProduct = {
   description: "",
   price: "0",
   image_url: "",
+  image_urls: [] as string[],
   category: "General",
   brand: "",
   is_available: true,
@@ -109,22 +110,29 @@ function ProductsAdmin() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const upload = useMutation({
-    mutationFn: async (file: File) => {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage
-        .from("product-images")
-        .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
-      if (error) throw error;
-      const { data, error: signError } = await supabase.storage
-        .from("product-images")
-        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
-      if (signError) throw signError;
-      return data.signedUrl;
+    mutationFn: async (files: File[]) => {
+      const urls: string[] = [];
+      for (const file of files) {
+        const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage
+          .from("product-images")
+          .upload(path, file, { contentType: file.type || "image/jpeg", upsert: false });
+        if (error) throw error;
+        const { data, error: signError } = await supabase.storage
+          .from("product-images")
+          .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signError) throw signError;
+        urls.push(data.signedUrl);
+      }
+      return urls;
     },
-    onSuccess: (url) => {
-      setForm((f) => ({ ...f, image_url: url }));
-      toast.success("Picture uploaded");
+    onSuccess: (urls) => {
+      setForm((f) => {
+        const all = [...f.image_urls, ...urls];
+        return { ...f, image_urls: all, image_url: f.image_url || all[0] || "" };
+      });
+      toast.success(urls.length > 1 ? `${urls.length} pictures uploaded` : "Picture uploaded");
     },
     onError: (e: Error) => toast.error("Could not upload picture", { description: e.message }),
   });
@@ -138,7 +146,8 @@ function ProductsAdmin() {
         name: values.name.trim(),
         description: values.description.trim(),
         price: Number(values.price) || 0,
-        image_url: values.image_url.trim() || null,
+        image_url: (values.image_url.trim() || values.image_urls[0]) ?? null,
+        image_urls: values.image_urls,
         category: values.category.trim() || "General",
         brand: values.brand.trim() || null,
         is_available: values.is_available,
@@ -180,6 +189,7 @@ function ProductsAdmin() {
       description: p.description,
       price: String(p.price),
       image_url: p.image_url ?? "",
+      image_urls: p.image_urls ?? (p.image_url ? [p.image_url] : []),
       category: p.category,
       brand: p.brand ?? "",
       is_available: p.is_available,
@@ -261,36 +271,61 @@ function ProductsAdmin() {
           </div>
         </div>
         <div>
-          <Label htmlFor="p-img">Product picture</Label>
+          <Label htmlFor="p-img">Product pictures</Label>
           <input
             id="p-img"
             ref={fileRef}
             type="file"
             accept="image/*"
+            multiple
             className="hidden"
             onChange={(e) => {
-              const file = e.target.files?.[0];
+              const files = Array.from(e.target.files ?? []);
               e.target.value = "";
-              if (file) upload.mutate(file);
+              if (files.length) upload.mutate(files);
             }}
           />
-          <div className="mt-1 flex items-center gap-3">
+          <div className="mt-1 flex flex-wrap items-center gap-3">
             <Button
               type="button"
               variant="outline"
               disabled={upload.isPending}
               onClick={() => fileRef.current?.click()}
             >
-              <ImagePlus /> {upload.isPending ? "Uploading…" : form.image_url ? "Change picture" : "Upload picture"}
+              <ImagePlus />{" "}
+              {upload.isPending
+                ? "Uploading…"
+                : form.image_urls.length
+                  ? "Add more pictures"
+                  : "Upload picture"}
             </Button>
-            {form.image_url && (
-              <img
-                src={form.image_url}
-                alt="Product preview"
-                loading="lazy"
-                className="size-24 rounded-lg border border-border object-cover"
-              />
-            )}
+            {form.image_urls.map((url, i) => (
+              <div key={url} className="relative">
+                <img
+                  src={url}
+                  alt={`Product preview ${i + 1}`}
+                  loading="lazy"
+                  className="size-24 rounded-lg border border-border object-cover"
+                />
+                <button
+                  type="button"
+                  aria-label="Remove picture"
+                  className="absolute -right-2 -top-2 rounded-full border border-border bg-background p-1 text-muted-foreground shadow-sm"
+                  onClick={() =>
+                    setForm((f) => {
+                      const rest = f.image_urls.filter((u) => u !== url);
+                      return {
+                        ...f,
+                        image_urls: rest,
+                        image_url: f.image_url === url ? (rest[0] ?? "") : f.image_url,
+                      };
+                    })
+                  }
+                >
+                  <Trash2 className="size-3" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 

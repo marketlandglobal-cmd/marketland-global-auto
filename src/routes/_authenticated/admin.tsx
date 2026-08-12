@@ -46,6 +46,7 @@ const emptyProduct = {
   description: "",
   price: "0",
   image_url: "",
+  image_urls: [] as string[],
   category: "General",
   brand: "",
   is_available: true,

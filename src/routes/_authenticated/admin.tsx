@@ -271,36 +271,61 @@ function ProductsAdmin() {
           </div>
         </div>
         <div>
-          <Label htmlFor="p-img">Product picture</Label>
+          <Label htmlFor="p-img">Product pictures</Label>
           <input
             id="p-img"
             ref={fileRef}
             type="file"
             accept="image/*"
+            multiple
             className="hidden"
             onChange={(e) => {
-              const file = e.target.files?.[0];
+              const files = Array.from(e.target.files ?? []);
               e.target.value = "";
-              if (file) upload.mutate(file);
+              if (files.length) upload.mutate(files);
             }}
           />
-          <div className="mt-1 flex items-center gap-3">
+          <div className="mt-1 flex flex-wrap items-center gap-3">
             <Button
               type="button"
               variant="outline"
               disabled={upload.isPending}
               onClick={() => fileRef.current?.click()}
             >
-              <ImagePlus /> {upload.isPending ? "Uploading…" : form.image_url ? "Change picture" : "Upload picture"}
+              <ImagePlus />{" "}
+              {upload.isPending
+                ? "Uploading…"
+                : form.image_urls.length
+                  ? "Add more pictures"
+                  : "Upload picture"}
             </Button>
-            {form.image_url && (
-              <img
-                src={form.image_url}
-                alt="Product preview"
-                loading="lazy"
-                className="size-24 rounded-lg border border-border object-cover"
-              />
-            )}
+            {form.image_urls.map((url, i) => (
+              <div key={url} className="relative">
+                <img
+                  src={url}
+                  alt={`Product preview ${i + 1}`}
+                  loading="lazy"
+                  className="size-24 rounded-lg border border-border object-cover"
+                />
+                <button
+                  type="button"
+                  aria-label="Remove picture"
+                  className="absolute -right-2 -top-2 rounded-full border border-border bg-background p-1 text-muted-foreground shadow-sm"
+                  onClick={() =>
+                    setForm((f) => {
+                      const rest = f.image_urls.filter((u) => u !== url);
+                      return {
+                        ...f,
+                        image_urls: rest,
+                        image_url: f.image_url === url ? (rest[0] ?? "") : f.image_url,
+                      };
+                    })
+                  }
+                >
+                  <Trash2 className="size-3" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 

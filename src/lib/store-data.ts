@@ -8,6 +8,7 @@ export type Product = {
   description: string;
   price: number;
   image_url: string | null;
+  image_urls?: string[] | null;
   category: string;
   brand: string | null;
   is_available: boolean;

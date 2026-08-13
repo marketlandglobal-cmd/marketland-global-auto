@@ -13,11 +13,11 @@ export function ProductCard({ product }: { product: Product }) {
   const soldOut = !product.is_available || product.stock_quantity <= 0;
 
   return (
-    <article className="group flex flex-col overflow-hidden surface-card">
+    <article className="group flex flex-col overflow-hidden surface-card transition-shadow duration-200 hover:shadow-[var(--shadow-elevated)]">
       <Link
         to="/product/$id"
         params={{ id: product.id }}
-        className="relative block aspect-square overflow-hidden bg-muted"
+        className="relative block aspect-square overflow-hidden bg-brand-tint"
       >
         {product.image_url ? (
           <img
@@ -37,7 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
           </Badge>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="flex flex-1 flex-col gap-2 p-4">
         <span className="text-xs uppercase tracking-wide text-muted-foreground">
           {product.category}
         </span>

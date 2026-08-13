@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
+import brandMark from "@/assets/marketland-mark.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -111,10 +112,16 @@ function AuthPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-12">
-      <h1 className="text-2xl font-bold">Your account</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Sign in or create an account to order spare parts and track deliveries.
-      </p>
+      <div className="flex flex-col items-center text-center">
+        <span className="grid size-14 place-items-center rounded-2xl surface-tint">
+          <img src={brandMark.url} alt="MarketLand logo" width={36} height={36} className="size-9" />
+        </span>
+        <h1 className="mt-4 text-2xl font-bold">Your account</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Sign in or create an account to order spare parts and track deliveries.
+        </p>
+      </div>
+
 
       <div className="mt-6 p-5 surface-card">
         <Tabs defaultValue="login">

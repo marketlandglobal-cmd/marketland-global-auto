@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { MoreVertical, ShoppingCart, Wrench, LogOut, User, Package, Shield } from "lucide-react";
+import { MoreVertical, ShoppingCart, LogOut, User, Package, Shield } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import brandMark from "@/assets/marketland-mark.png.asset.json";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +31,13 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur">
       <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
         <Link to="/" className="flex min-w-0 items-center gap-2">
-          <span className="grid size-9 shrink-0 place-items-center rounded-lg deep-panel">
-            <Wrench className="size-4" />
-          </span>
+          <img
+            src={brandMark.url}
+            alt="MarketLand logo"
+            width={36}
+            height={36}
+            className="size-9 shrink-0"
+          />
           <span className="min-w-0">
             <span className="block truncate font-display text-base font-bold leading-tight sm:text-lg">
               {settings?.store_name ?? "Marketland Global"}
@@ -60,7 +65,7 @@ export function SiteHeader() {
             <Link to="/cart">
               <ShoppingCart />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-accent-foreground">
+                <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
                   {count}
                 </span>
               )}

@@ -36,7 +36,7 @@ function SupportPage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <div className="p-5 surface-card">
-          <Phone className="size-5 text-accent" />
+          <Phone className="size-5 text-primary" />
           <h2 className="mt-3 text-sm font-bold uppercase tracking-wide">Call us</h2>
           <p className="mt-1 text-lg font-semibold">{settings?.support_phone || "Coming soon"}</p>
           {settings?.support_phone && (
@@ -47,7 +47,7 @@ function SupportPage() {
         </div>
 
         <div className="p-5 surface-card">
-          <Mail className="size-5 text-accent" />
+          <Mail className="size-5 text-primary" />
           <h2 className="mt-3 text-sm font-bold uppercase tracking-wide">Email us</h2>
           <p className="mt-1 break-all text-lg font-semibold">
             {settings?.support_email || "Coming soon"}
@@ -61,7 +61,7 @@ function SupportPage() {
 
         {settings?.whatsapp && (
           <div className="p-5 surface-card">
-            <MessageCircle className="size-5 text-accent" />
+            <MessageCircle className="size-5 text-primary" />
             <h2 className="mt-3 text-sm font-bold uppercase tracking-wide">WhatsApp</h2>
             <p className="mt-1 text-lg font-semibold">{settings.whatsapp}</p>
             <Button variant="accent" size="sm" className="mt-3" asChild>
@@ -78,7 +78,7 @@ function SupportPage() {
 
         {settings?.address && (
           <div className="p-5 surface-card">
-            <MapPin className="size-5 text-accent" />
+            <MapPin className="size-5 text-primary" />
             <h2 className="mt-3 text-sm font-bold uppercase tracking-wide">Visit us</h2>
             <p className="mt-1 text-lg font-semibold">{settings.address}</p>
           </div>

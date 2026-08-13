@@ -109,7 +109,7 @@ export function InstallGate({ children }: { children: ReactNode }) {
         alt="Marketland Global app icon"
         width={96}
         height={96}
-        className="size-24 rounded-2xl shadow-lg"
+        className="size-24 rounded-2xl border border-white/15 shadow-lg"
       />
       <h1 className="mt-7 text-3xl font-bold leading-tight sm:text-4xl">
         Welcome to Marketland Global

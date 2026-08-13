@@ -43,7 +43,7 @@ function HomePage() {
           className="absolute inset-0 size-full object-cover opacity-35"
         />
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-soft">
             Nationwide delivery in Nigeria
           </p>
           <h1 className="mt-3 max-w-2xl text-3xl font-bold leading-tight sm:text-5xl">
@@ -61,7 +61,7 @@ function HomePage() {
               variant="outline"
               size="lg"
               asChild
-              className="border-white/30 bg-transparent hover:bg-white/10"
+              className="border-white/40 bg-transparent text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
             >
               <Link to="/support">Talk to us</Link>
             </Button>

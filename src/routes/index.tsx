@@ -61,7 +61,7 @@ function HomePage() {
               variant="outline"
               size="lg"
               asChild
-              className="border-white/30 bg-transparent hover:bg-white/10"
+              className="border-white/40 bg-transparent text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
             >
               <Link to="/support">Talk to us</Link>
             </Button>

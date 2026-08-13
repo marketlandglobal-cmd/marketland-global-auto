@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import { settingsQuery } from "@/lib/store-data";
+import brandMark from "@/assets/marketland-mark.png.asset.json";
 
 export function SiteFooter() {
   const { data: settings } = useQuery(settingsQuery);
@@ -11,7 +12,12 @@ export function SiteFooter() {
     <footer className="mt-16 deep-panel">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <h3 className="text-lg font-bold">{settings?.store_name ?? "Marketland Global"}</h3>
+          <div className="flex items-center gap-2">
+            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-white">
+              <img src={brandMark.url} alt="MarketLand logo" width={30} height={30} className="size-7" />
+            </span>
+            <h3 className="text-lg font-bold">{settings?.store_name ?? "Marketland Global"}</h3>
+          </div>
           <p className="mt-2 max-w-sm text-sm opacity-80">
             {settings?.store_info ?? "Quality auto spare parts across Nigeria."}
           </p>

@@ -10,3 +10,176 @@
  * All colors are semantic tokens. Never hardcode colors in components.
  */
 
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 2px);
+  --radius-2xl: calc(var(--radius) + 6px);
+  --radius-3xl: calc(var(--radius) + 10px);
+  --radius-4xl: calc(var(--radius) + 14px);
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-tint: var(--brand-tint);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Brand scale (from the MarketLand logo) */
+  --brand-deep: #3216a8;
+  --brand: #4326c7;
+  --brand-bright: #5b45d6;
+  --brand-soft: #8b7be8;
+  --brand-tint: #f0eeff;
+
+  --background: #f7f7fb;
+  --foreground: #24242b;
+  --card: #ffffff;
+  --card-foreground: #24242b;
+  --popover: #ffffff;
+  --popover-foreground: #24242b;
+  --primary: #4326c7;
+  --primary-foreground: #ffffff;
+  --secondary: #ececf2;
+  --secondary-foreground: #24242b;
+  --muted: #ececf2;
+  --muted-foreground: #777783;
+  --accent: #f0eeff;
+  --accent-foreground: #3216a8;
+  --success: #1f8a53;
+  --success-foreground: #ffffff;
+  --warning: #b26a00;
+  --warning-foreground: #ffffff;
+  --destructive: #c0392f;
+  --destructive-foreground: #ffffff;
+  --border: #e4e4ee;
+  --input: #dcdce6;
+  --ring: #4326c7;
+  --chart-1: #3216a8;
+  --chart-2: #4326c7;
+  --chart-3: #5b45d6;
+  --chart-4: #8b7be8;
+  --chart-5: #c8c2f5;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #24242b;
+  --sidebar-primary: #4326c7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0eeff;
+  --sidebar-accent-foreground: #3216a8;
+  --sidebar-border: #e4e4ee;
+  --sidebar-ring: #4326c7;
+
+  --gradient-deep: linear-gradient(160deg, #3216a8, #1f0f6b);
+  --shadow-card: 0 1px 2px rgb(21 21 26 / 5%);
+  --shadow-elevated: 0 1px 2px rgb(21 21 26 / 5%), 0 12px 28px -18px rgb(21 21 26 / 22%);
+  --shadow-glow: 0 8px 20px -10px rgb(67 38 199 / 45%);
+}
+
+.dark {
+  --background: #15151a;
+  --foreground: #f5f5f8;
+  --card: #1d1d24;
+  --card-foreground: #f5f5f8;
+  --popover: #1d1d24;
+  --popover-foreground: #f5f5f8;
+  --primary: #7a63e6;
+  --primary-foreground: #ffffff;
+  --secondary: #26262f;
+  --secondary-foreground: #f5f5f8;
+  --muted: #26262f;
+  --muted-foreground: #a6a6b3;
+  --accent: #241f45;
+  --accent-foreground: #c8c2f5;
+  --success: #35a86b;
+  --destructive: #e05a4e;
+  --border: rgb(255 255 255 / 12%);
+  --input: rgb(255 255 255 / 16%);
+  --ring: #7a63e6;
+  --sidebar: #1d1d24;
+  --sidebar-foreground: #f5f5f8;
+  --sidebar-accent: #241f45;
+  --sidebar-accent-foreground: #c8c2f5;
+  --sidebar-border: rgb(255 255 255 / 12%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+}
+
+@utility surface-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+@utility surface-tint {
+  background-color: var(--color-brand-tint);
+  border: 1px solid color-mix(in srgb, var(--color-brand) 12%, transparent);
+  border-radius: var(--radius-lg);
+}
+
+@utility deep-panel {
+  background-image: var(--gradient-deep);
+  color: #ffffff;
+}

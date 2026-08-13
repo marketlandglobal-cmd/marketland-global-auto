@@ -60,7 +60,7 @@ export function SiteHeader() {
             <Link to="/cart">
               <ShoppingCart />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-accent-foreground">
+                <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
                   {count}
                 </span>
               )}

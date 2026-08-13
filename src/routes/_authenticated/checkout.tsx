@@ -198,7 +198,7 @@ function CheckoutPage() {
 
           <div className="p-5 surface-card">
             <div className="flex items-center gap-2">
-              <Landmark className="size-5 text-accent" />
+              <Landmark className="size-5 text-primary" />
               <h2 className="text-lg font-bold">Payment details</h2>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">

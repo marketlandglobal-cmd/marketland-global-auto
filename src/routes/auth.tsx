@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
+import brandMark from "@/assets/marketland-mark.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({

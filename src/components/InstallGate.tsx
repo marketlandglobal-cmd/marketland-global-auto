@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { Smartphone, Share, MoreVertical, MonitorDown } from "lucide-react";
+import { Smartphone, Share, PlusSquare, MonitorDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { isBlockedContext } from "@/lib/pwa";
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-};
+import {
+  isBlockedContext,
+  getInstallPrompt,
+  clearInstallPrompt,
+  onInstallPromptChange,
+  type BeforeInstallPromptEvent,
+} from "@/lib/pwa";
 
 const INSTALLED_KEY = "mlg-installed";
 

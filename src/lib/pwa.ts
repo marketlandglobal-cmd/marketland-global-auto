@@ -33,6 +33,46 @@ async function unregisterAppServiceWorkers() {
   );
 }
 
+export type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
+
+/**
+ * The browser fires `beforeinstallprompt` very early — often before React
+ * hydrates. Capture it at module scope so the Install button can call
+ * prompt() straight away (one tap, then the OS confirmation dialog).
+ */
+let deferredPrompt: BeforeInstallPromptEvent | null = null;
+const promptListeners = new Set<(event: BeforeInstallPromptEvent | null) => void>();
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredPrompt = event as BeforeInstallPromptEvent;
+    promptListeners.forEach((listener) => listener(deferredPrompt));
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    promptListeners.forEach((listener) => listener(null));
+  });
+}
+
+export function getInstallPrompt() {
+  return deferredPrompt;
+}
+
+export function clearInstallPrompt() {
+  deferredPrompt = null;
+}
+
+export function onInstallPromptChange(
+  listener: (event: BeforeInstallPromptEvent | null) => void,
+) {
+  promptListeners.add(listener);
+  return () => promptListeners.delete(listener);
+}
+
 export function registerServiceWorker() {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
 

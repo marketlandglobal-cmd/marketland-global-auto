@@ -137,33 +137,36 @@ export function InstallGate({ children }: { children: ReactNode }) {
 
       {(showInstructions || isIOS) && (
         <div className="mt-8 w-full max-w-sm rounded-xl border border-white/15 bg-white/5 p-5 text-left text-sm">
-          <p className="font-bold">How to install on this device</p>
+          <p className="font-bold">Two quick taps to finish</p>
           {isIOS ? (
             <ol className="mt-3 space-y-2 opacity-90">
               <li className="flex gap-2">
                 <Share className="mt-0.5 size-4 shrink-0" />
-                <span>Tap the Share button in Safari&apos;s toolbar.</span>
+                <span>1. Tap the Share icon at the bottom of Safari.</span>
               </li>
-              <li>2. Choose “Add to Home Screen”.</li>
-              <li>3. Tap “Add”, then open Marketland Global from your home screen.</li>
+              <li className="flex gap-2">
+                <PlusSquare className="mt-0.5 size-4 shrink-0" />
+                <span>2. Tap “Add to Home Screen”, then “Add”.</span>
+              </li>
+              <li className="opacity-80">
+                iOS does not allow apps to install themselves, so this confirmation is required.
+              </li>
             </ol>
           ) : isAndroid ? (
             <ol className="mt-3 space-y-2 opacity-90">
               <li className="flex gap-2">
-                <MoreVertical className="mt-0.5 size-4 shrink-0" />
-                <span>Open the browser menu (three dots) in Chrome.</span>
+                <Smartphone className="mt-0.5 size-4 shrink-0" />
+                <span>1. Tap INSTALL APP again — your browser will show its install dialog.</span>
               </li>
-              <li>2. Tap “Install app” or “Add to Home screen”.</li>
-              <li>3. Confirm, then open Marketland Global from your home screen.</li>
+              <li>2. Tap “Install” to confirm. Android always asks for this confirmation.</li>
             </ol>
           ) : (
             <ol className="mt-3 space-y-2 opacity-90">
               <li className="flex gap-2">
                 <MonitorDown className="mt-0.5 size-4 shrink-0" />
-                <span>Click the install icon in your browser&apos;s address bar.</span>
+                <span>1. Tap INSTALL APP again to open your browser&apos;s install dialog.</span>
               </li>
-              <li>2. Or open the browser menu and choose “Install Marketland Global”.</li>
-              <li>3. Confirm the installation to continue.</li>
+              <li>2. Confirm the installation to continue.</li>
             </ol>
           )}
         </div>

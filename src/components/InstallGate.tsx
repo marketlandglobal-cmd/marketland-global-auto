@@ -51,10 +51,10 @@ export function InstallGate({ children }: { children: ReactNode }) {
 
     setAllowed(false);
 
-    const onBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setPromptEvent(event as BeforeInstallPromptEvent);
-    };
+    // The event may already have fired before hydration — read the captured one.
+    setPromptEvent(getInstallPrompt());
+    const unsubscribe = onInstallPromptChange(setPromptEvent);
+
     const onInstalled = () => {
       localStorage.setItem(INSTALLED_KEY, "1");
       setAllowed(true);
@@ -64,24 +64,27 @@ export function InstallGate({ children }: { children: ReactNode }) {
       if (isStandalone()) onInstalled();
     };
 
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
     window.addEventListener("appinstalled", onInstalled);
     media.addEventListener("change", onDisplayModeChange);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+      unsubscribe();
       window.removeEventListener("appinstalled", onInstalled);
       media.removeEventListener("change", onDisplayModeChange);
     };
   }, []);
 
   const handleInstall = useCallback(async () => {
-    if (!promptEvent) {
+    const event = promptEvent ?? getInstallPrompt();
+    if (!event) {
+      // No official prompt available (iOS Safari, or the browser hasn't offered
+      // it yet) — show the shortest supported flow for this device.
       setShowInstructions(true);
       return;
     }
-    await promptEvent.prompt();
-    const { outcome } = await promptEvent.userChoice;
+    await event.prompt();
+    const { outcome } = await event.userChoice;
+    clearInstallPrompt();
     setPromptEvent(null);
     if (outcome === "accepted") {
       localStorage.setItem(INSTALLED_KEY, "1");

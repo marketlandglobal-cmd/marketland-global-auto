@@ -32,7 +32,7 @@ export function ReviewNotice() {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="max-w-sm">
+      <AlertDialogContent className="fixed left-1/2 top-1/2 max-w-sm -translate-x-1/2 -translate-y-1/2">
         <AlertDialogHeader>
           <span className="grid size-11 place-items-center rounded-xl bg-secondary">
             <ShieldAlert className="size-5 text-primary" />

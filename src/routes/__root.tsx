@@ -18,6 +18,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import { InstallGate } from "@/components/InstallGate";
+import { ReviewNotice } from "@/components/ReviewNotice";
 
 function NotFoundComponent() {
   return (
@@ -151,6 +152,7 @@ function RootComponent() {
       <AuthProvider>
         <CartProvider>
           <InstallGate>
+            <ReviewNotice />
             <div className="flex min-h-screen flex-col">
               <SiteHeader />
               <main className="flex-1">
